@@ -1,0 +1,146 @@
+name: TMCStaffWork
+main: su.twomc.staffwork.TmcStaffWorkPlugin
+version: '${version}'
+api-version: '1.20'
+description: Управление персоналом и учёт рабочего времени для Minecraft-серверов.
+website: https://github.com/younaxo/twomcsu-staffwork
+author: younaxo
+
+# Реализована через собственный слой планировщика (см. su.twomc.staffwork.scheduler) —
+# region/global/entity/async-задачи выбираются корректно, а не только эта декларация.
+folia-supported: true
+
+softdepend: [PlaceholderAPI]
+
+commands:
+  staffwork:
+    aliases: [sw]
+    description: Управление персоналом TMC StaffWork.
+    usage: /staffwork help
+
+# Права проверяются внутри команды на каждую подкоманду — верхнеуровневого permission
+# у самой команды намеренно нет, иначе была бы невозможна точечная выдача прав.
+permissions:
+  tmc.staffwork.*:
+    description: Полный доступ ко всем возможностям TMC StaffWork.
+    default: op
+    children:
+      tmc.staffwork.admin.*: true
+
+  tmc.staffwork.admin.*:
+    description: Административная группа — управление персоналом, рангами и конфигурацией.
+    default: op
+    children:
+      tmc.staffwork.moderator.*: true
+      tmc.staffwork.staff.add: true
+      tmc.staffwork.staff.remove: true
+      tmc.staffwork.staff.enable: true
+      tmc.staffwork.staff.disable: true
+      tmc.staffwork.command.reload: true
+      tmc.staffwork.admin.reload: true
+      tmc.staffwork.admin.database.migrate: true
+
+  tmc.staffwork.moderator.*:
+    description: Модераторская группа — управление статусами и сессиями других сотрудников.
+    default: false
+    children:
+      tmc.staffwork.staff.*: true
+      tmc.staffwork.status.set.others: true
+      tmc.staffwork.session.manage.others: true
+      tmc.staffwork.staff.rank.set: true
+      tmc.staffwork.statistics.view.others: true
+
+  tmc.staffwork.staff.*:
+    description: Группа рядового сотрудника — просмотр списка и своей карточки, начало/окончание смены.
+    default: false
+    children:
+      tmc.staffwork.user.*: true
+      tmc.staffwork.staff.list: true
+      tmc.staffwork.staff.info.others: true
+
+  tmc.staffwork.user.*:
+    description: Базовые команды, доступные любому игроку (не дают доступа к чужим данным).
+    default: true
+    children:
+      tmc.staffwork.command.help: true
+      tmc.staffwork.command.version: true
+      tmc.staffwork.staff.info.self: true
+      tmc.staffwork.status.set.self: true
+      tmc.staffwork.session.start.self: true
+      tmc.staffwork.session.stop.self: true
+      tmc.staffwork.statistics.view.self: true
+      tmc.staffwork.telegram.link: true
+      tmc.staffwork.telegram.unlink: true
+
+  tmc.staffwork.command.help:
+    description: Просмотр справки по командам.
+    default: true
+  tmc.staffwork.command.version:
+    description: Просмотр версии плагина.
+    default: true
+  tmc.staffwork.command.reload:
+    description: Перезагрузка конфигурации плагина.
+    default: op
+
+  tmc.staffwork.staff.list:
+    description: Просмотр списка сотрудников.
+    default: false
+  tmc.staffwork.staff.info.self:
+    description: Просмотр собственной карточки сотрудника.
+    default: true
+  tmc.staffwork.staff.info.others:
+    description: Просмотр карточки другого сотрудника.
+    default: false
+  tmc.staffwork.staff.add:
+    description: Добавление нового сотрудника.
+    default: op
+  tmc.staffwork.staff.remove:
+    description: Удаление сотрудника из системы.
+    default: op
+  tmc.staffwork.staff.rank.set:
+    description: Назначение внутреннего ранга сотруднику.
+    default: false
+  tmc.staffwork.staff.enable:
+    description: Включение (активация) сотрудника.
+    default: op
+  tmc.staffwork.staff.disable:
+    description: Отключение (деактивация) сотрудника.
+    default: op
+
+  tmc.staffwork.status.set.self:
+    description: Изменение собственного рабочего статуса.
+    default: true
+  tmc.staffwork.status.set.others:
+    description: Изменение рабочего статуса другого сотрудника.
+    default: false
+
+  tmc.staffwork.session.start.self:
+    description: Начало собственной рабочей сессии.
+    default: true
+  tmc.staffwork.session.stop.self:
+    description: Завершение собственной рабочей сессии.
+    default: true
+  tmc.staffwork.session.manage.others:
+    description: Управление рабочими сессиями других сотрудников.
+    default: false
+
+  tmc.staffwork.statistics.view.self:
+    description: Просмотр собственной статистики рабочего времени.
+    default: true
+  tmc.staffwork.statistics.view.others:
+    description: Просмотр статистики рабочего времени других сотрудников.
+    default: false
+
+  tmc.staffwork.telegram.link:
+    description: Привязка своего Telegram-аккаунта.
+    default: true
+  tmc.staffwork.telegram.unlink:
+    description: Отвязка своего Telegram-аккаунта.
+    default: true
+
+  tmc.staffwork.admin.reload:
+    description: Административная перезагрузка плагина.
+    default: op
+  tmc.staffwork.admin.database.migrate:
+    description: Ручной запуск миграции схемы базы данных.
+    default: op

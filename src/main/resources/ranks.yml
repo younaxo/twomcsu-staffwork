@@ -1,0 +1,21 @@
+# Внутренние ранги (должности) сотрудников. Не связаны с правами Bukkit напрямую —
+# используются только для отображения в /staffwork list и /staffwork info.
+#
+# Идентификатор ранга (ключ) — латиница, цифры, "-", "_" (до 32 символов).
+# weight влияет только на порядок отображения (больше — выше в списке).
+
+default-rank: "trainee"
+
+ranks:
+  trainee:
+    display-name: "<gray>Стажёр</gray>"
+    weight: 0
+  moderator:
+    display-name: "<green>Модератор</green>"
+    weight: 10
+  senior-moderator:
+    display-name: "<dark_green>Старший модератор</dark_green>"
+    weight: 20
+  administrator:
+    display-name: "<red>Администратор</red>"
+    weight: 30
