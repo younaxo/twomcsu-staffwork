@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+    Умеренный набор проверок статического анализа для TMC StaffWork.
+    Цель — ловить реальные проблемы (звёздные импорты, пустые блоки, длинные строки),
+    не требуя избыточного Javadoc на каждый метод.
+-->
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+
+    <!-- LineLength работает построчно по сырому файлу, поэтому в Checkstyle 10.x она
+         является дочерним модулем корневого Checker, а не TreeWalker. -->
+    <module name="LineLength">
+        <property name="max" value="140"/>
+        <property name="ignorePattern" value="^import|^package"/>
+    </module>
+
+    <module name="TreeWalker">
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
+        <module name="RedundantImport"/>
+
+        <module name="EmptyBlock">
+            <property name="option" value="text"/>
+        </module>
+        <module name="EmptyCatchBlock">
+            <property name="exceptionVariableName" value="expected|ignored"/>
+        </module>
+        <module name="EqualsHashCode"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <module name="NeedBraces"/>
+        <module name="OneStatementPerLine"/>
+
+        <module name="PackageDeclaration"/>
+
+        <!-- MissingSwitchDefault сознательно не используется: весь код написан на новом
+             switch-выражении/операторе (стрелочный синтаксис) по перечислениям, исчерпываемость
+             которого уже проверяется компилятором Java — обязательный default был бы мёртвым кодом. -->
+        <module name="FallThrough"/>
+
+        <module name="IllegalImport">
+            <!-- Прямое обращение к NMS/CraftBukkit запрещено архитектурой плагина. -->
+            <property name="illegalPkgs" value="net.minecraft.server"/>
+            <property name="illegalClasses"
+                      value="^org\.bukkit\.craftbukkit\..*"/>
+            <property name="regexp" value="true"/>
+        </module>
+    </module>
+</module>
