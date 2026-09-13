@@ -1,0 +1,73 @@
+# Локализация TMC StaffWork. Поддерживается разметка MiniMessage (<green>, <bold> и т.д.) —
+# на Paper/Folia рендерится полноценно, на обычном Spigot без Paper упрощённо конвертируется
+# в legacy-цвета (см. README, раздел "Форматирование сообщений").
+#
+# Плейсхолдеры вида {player}, {rank}, {status} и т.д. подставляются самим плагином.
+
+prefix: "<gray>[<gold>TMC StaffWork</gold>]</gray> "
+
+help:
+  header: "<gold><bold>TMC StaffWork</bold></gold> <gray>— справка по командам:</gray>"
+  line:
+    info: "<yellow>/staffwork info [игрок]</yellow> <gray>— карточка сотрудника</gray>"
+    list: "<yellow>/staffwork list</yellow> <gray>— список сотрудников</gray>"
+    status: "<yellow>/staffwork status [статус]</yellow> <gray>— посмотреть/сменить свой статус</gray>"
+    start: "<yellow>/staffwork start</yellow> <gray>— начать рабочую сессию</gray>"
+    stop: "<yellow>/staffwork stop</yellow> <gray>— завершить рабочую сессию</gray>"
+    stats: "<yellow>/staffwork stats [игрок] [today|week|month|all]</yellow> <gray>— статистика</gray>"
+    add: "<yellow>/staffwork add <игрок> [ранг]</yellow> <gray>— добавить сотрудника</gray>"
+    remove: "<yellow>/staffwork remove <игрок></yellow> <gray>— удалить сотрудника</gray>"
+    rank: "<yellow>/staffwork rank set <игрок> <ранг></yellow> <gray>— изменить ранг</gray>"
+    reload: "<yellow>/staffwork reload</yellow> <gray>— перезагрузить конфигурацию</gray>"
+    version: "<yellow>/staffwork version</yellow> <gray>— версия плагина</gray>"
+
+error:
+  no-permission: "<red>У вас нет прав для выполнения этой команды.</red>"
+  player-only: "<red>Эту команду может выполнить только игрок.</red>"
+  unknown-subcommand: "<red>Неизвестная подкоманда: {input}. Используйте /staffwork help.</red>"
+  usage: "<red>Использование: {usage}</red>"
+  player-not-found: "<red>Игрок '{player}' не найден.</red>"
+  not-employee: "<red>Этот игрок не является сотрудником.</red>"
+  already-employee: "<red>Этот игрок уже добавлен в систему учёта персонала.</red>"
+  invalid-rank: "<red>Некорректный ранг: {rank}. Допустимы только латиница, цифры, '-' и '_'.</red>"
+  invalid-status: "<red>Неизвестный статус: {status}. Доступны: WORKING, AFK, OFF_DUTY, BREAK, MEETING, TRAINING.</red>"
+  invalid-period: "<red>Неизвестный период: {period}. Доступны: today, week, month, all.</red>"
+  internal: "<red>Произошла внутренняя ошибка. Подробности — в логе сервера.</red>"
+
+staff:
+  added: "<green>Сотрудник {player} добавлен с рангом {rank}.</green>"
+  removed: "<green>Сотрудник {player} удалён из системы учёта.</green>"
+  rank-updated: "<green>Сотруднику {player} назначен ранг {rank}.</green>"
+  list-header: "<gold>Сотрудники ({count}):</gold>"
+  list-entry: "<gray>— </gray><yellow>{player}</yellow> <gray>[{rank}]</gray> <white>{status}</white> <gray>(активен: {enabled})</gray>"
+  list-empty: "<gray>Список сотрудников пуст.</gray>"
+  info: "<gold>{player}</gold> <gray>[{rank}]</gray>\n<gray>Статус:</gray> <white>{status}</white> <gray>| Активен:</gray> <white>{enabled}</white>\n<gray>Отработано сегодня:</gray> <white>{today}</white>"
+
+status:
+  current: "<gray>Ваш текущий статус:</gray> <white>{status}</white>"
+  updated-self: "<green>Ваш статус изменён на {status}.</green>"
+  updated-others: "<green>Статус сотрудника {player} изменён на {status}.</green>"
+
+session:
+  started: "<green>Рабочая сессия начата.</green>"
+  already-active: "<red>У вас уже есть активная рабочая сессия.</red>"
+  stopped: "<green>Рабочая сессия завершена. Продолжительность: {duration}.</green>"
+  not-active: "<red>У вас нет активной рабочей сессии.</red>"
+
+stats:
+  line: "<gray>Статистика {player} за период {period}:</gray> <white>{duration}</white>"
+
+reload:
+  success: "<green>Конфигурация перезагружена.</green>"
+  storage-changed: "<yellow>Конфигурация перезагружена, но тип хранилища был изменён — для применения требуется полный перезапуск сервера.</yellow>"
+
+version:
+  line: "<gold>{name}</gold> <gray>версия</gray> <white>{version}</white>"
+
+telegram:
+  code-issued: "<green>Код привязки: <bold>{code}</bold></green>\n<gray>Отправьте его боту в Telegram в течение 5 минут. Никому не сообщайте этот код.</gray>"
+  unlinked: "<green>Telegram-аккаунт отвязан.</green>"
+
+notify:
+  login: "<gray>[Персонал]</gray> <yellow>{player}</yellow> <gray>зашёл на сервер.</gray>"
+  logout: "<gray>[Персонал]</gray> <yellow>{player}</yellow> <gray>вышел с сервера.</gray>"

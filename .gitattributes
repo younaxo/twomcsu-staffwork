@@ -1,0 +1,10 @@
+# Единые окончания строк независимо от локальных настроек Git на машине разработчика.
+# Важно для gradlew: если он попадёт в репозиторий с CRLF, сборка ломается на Linux CI.
+* text=auto eol=lf
+
+*.bat text eol=crlf
+gradlew text eol=lf
+
+*.jar binary
+*.png binary
+*.jpg binary

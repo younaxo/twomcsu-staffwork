@@ -1,0 +1,66 @@
+name: Сборка и тесты
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Gradle build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout репозитория
+        uses: actions/checkout@v4
+
+      - name: Настройка JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Кеширование Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Проверка форматирования (Spotless)
+        run: ./gradlew spotlessCheck --no-daemon
+
+      - name: Статический анализ (Checkstyle)
+        run: ./gradlew checkstyleMain checkstyleTest --no-daemon
+
+      - name: Модульные тесты
+        run: ./gradlew test --no-daemon
+
+      - name: Публикация отчёта о тестах
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: build/reports/tests/
+          if-no-files-found: ignore
+
+      - name: Сборка итогового JAR
+        run: ./gradlew shadowJar --no-daemon
+
+      - name: Проверка отсутствия секретов в итоговом JAR
+        run: |
+          set -euo pipefail
+          if unzip -p build/libs/TMCStaffWork-*.jar config.yml | grep -Eiq '(bot-token|password):\s*"[^"[:space:]]+' ; then
+            echo "В JAR обнаружены непустые значения секретов в config.yml!"
+            exit 1
+          fi
+          echo "Секретов в упакованном config.yml не найдено."
+
+      - name: Загрузка собранного JAR как артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: TMCStaffWork
+          path: build/libs/TMCStaffWork-*.jar
